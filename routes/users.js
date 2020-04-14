@@ -6,4 +6,8 @@ router.get('/', async (req, res) => {
     res.send(users);
   });
 
+  router.get('/:id/:name', (request, response) => {
+    response.send(`You are requesting for id: ${request.params.id} and name: ${request.params.name}.`);
+  });
+
   module.exports = router;

@@ -9,7 +9,7 @@ const User = mongoose.model('User', new mongoose.Schema({
     maxlength: 50
   },
   lastName: {
-    type: Boolean,
+    type: String,
     default: false
   },
   
