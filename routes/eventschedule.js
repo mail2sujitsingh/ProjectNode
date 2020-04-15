@@ -8,25 +8,46 @@ const {EventSchedule} = require('../models/eventschedule');
 router.get('/', async (req, res) => {
     console.log("User: ", req.query.user);
     const eventscheduleData = await EventSchedule.find();
+    console.log("Response: ", eventscheduleData);
     res.status(200).send(eventscheduleData);
 });
 
 router.post('/', async (req, res) => {
-    var eventscheduleObj = new EventSchedule({
-        title: req.body.title,
-        description: req.body.description,
-        start: req.body.start,
-        end: req.body.end
-    });
-    console.log('eventscheduleObj:', eventscheduleObj);
 
-    // save model to database
-    eventscheduleObj.save(function (err, eventschedule) {
-      if (err) return console.error(err);
-      console.log(eventschedule.title + " saved to Event Schedule collection.");
-    });
+    if(req.body.id) {
 
-    res.status(200).send("Success");
+      // Update the EventSchedule with the existing "_id".
+      EventSchedule.findOneAndUpdate(
+        {_id: req.body.id},
+        {$set:{
+          title: req.body.title,
+          description: req.body.description,
+          start: req.body.start,
+          end: req.body.end
+        }},
+        {new: true},
+        function (err, eventschedule) {
+          if (err) return console.error(err);
+          console.log(eventschedule.title + " updated to Event Schedule collection.");
+          res.status(200).send(eventschedule);
+      });
+    } else {
+      var eventscheduleObj = new EventSchedule({
+          //_id: req.body._id,
+          title: req.body.title,
+          description: req.body.description,
+          start: req.body.start,
+          end: req.body.end
+      });
+      console.log('eventscheduleObj:', eventscheduleObj);
+
+      // Save the EventSchedule with the newly generated "_id".
+      eventscheduleObj.save(function (err, eventschedule) {
+        if (err) return console.error(err);
+        console.log(eventschedule.title + " saved to Event Schedule collection.");
+        res.status(200).send(eventschedule);
+      });
+    }
 
   });
 
