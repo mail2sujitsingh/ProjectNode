@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const EventSchedule = mongoose.model('eventschedule', new mongoose.Schema({
-      //  _id: String,
+        eventScheduleId: String,
         title: String,
         description: String,
         start: String,
         end: String,
-        user: String
+        user: String,
+        attendees: [Number]
   }));
 
   exports.EventSchedule = EventSchedule;
