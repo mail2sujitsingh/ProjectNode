@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { v1: uuidv1 } = require('uuid');
 const {EventSchedule} = require('../models/eventschedule');
 
 // Getting the EventSchedule data based on the selected USER.
@@ -12,18 +13,19 @@ router.get('/', async (req, res) => {
 
 // Saving/ Updating the EventSchedule data.
 router.post('/', async (req, res) => {
+    console.log("req.body.eventScheduleId: ", req.body.eventScheduleId);
+    if(req.body.eventScheduleId) {
 
-    if(req.body.id) {
-
-      // Update the EventSchedule with the existing "_id".
+      // Update the EventSchedule with the existing "eventScheduleId".
       EventSchedule.findOneAndUpdate(
-        {_id: req.body.id},
+        {eventScheduleId: req.body.eventScheduleId},
         {$set:{
           title: req.body.title,
           description: req.body.description,
           start: req.body.start,
           end: req.body.end,
-          user: req.body.user
+          user: req.body.user,
+          attendees: req.body.attendees
         }},
         {new: true},
         function (err, eventschedule) {
@@ -33,12 +35,13 @@ router.post('/', async (req, res) => {
       });
     } else {
       var eventscheduleObj = new EventSchedule({
-          //_id: req.body._id,
+          eventScheduleId: uuidv1(),
           title: req.body.title,
           description: req.body.description,
           start: req.body.start,
           end: req.body.end,
-          user: req.body.user
+          user: req.body.user,
+          attendees: req.body.attendees
       });
       console.log('eventscheduleObj:', eventscheduleObj);
 
@@ -52,14 +55,13 @@ router.post('/', async (req, res) => {
 
   });
 
-// Removing the existing EventSchedule data based on it's ID.
+// Removing the existing EventSchedule data based on it's eventScheduleId.
 router.delete('/', async (req, res) => {
-      var isEventScheduleDeleted = false;
       console.log(`Deleting one record for USER: ${req.query.user} and ID: ${req.query.eventScheduleId}`);
-      EventSchedule.findByIdAndRemove(req.query.eventScheduleId, (err, eventschedule) => {
+      EventSchedule.findOneAndRemove({eventScheduleId: req.query.eventScheduleId}, (err, eventschedule) => {
           if (err) return res.status(500).send(err);
 
-          console.log("EventSchedule successfully deleted for ID: ", eventschedule);
+          console.log("Successfully deleted EventSchedule is: ", eventschedule);
           res.status(200).send(eventschedule);
       });
   });
