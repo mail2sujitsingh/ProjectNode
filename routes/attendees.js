@@ -26,6 +26,17 @@ router.post('/', async (req, res) => {
         console.log(attendeeResponse.text + " saved to Attendees collection.");
         res.status(200).send(attendeeResponse);
       });
-  });
+});
+
+// Removing the existing Attendees data based on it's attendeeId.
+router.delete('/', async (req, res) => {
+      console.log(`Deleting record for attendeeId: ${req.query.attendeeId}`);
+      Attendees.findOneAndRemove({attendeeId: req.query.attendeeId}, (err, attendeeResponse) => {
+          if (err) return res.status(500).send(err);
+
+          console.log("Successfully deleted Attendee is: ", attendeeResponse);
+          res.status(200).send(attendeeResponse);
+      });
+});
 
 module.exports = router;

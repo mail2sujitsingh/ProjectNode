@@ -55,14 +55,13 @@ router.post('/', async (req, res) => {
 
   });
 
-// Removing the existing EventSchedule data based on it's ID.
+// Removing the existing EventSchedule data based on it's eventScheduleId.
 router.delete('/', async (req, res) => {
-      var isEventScheduleDeleted = false;
       console.log(`Deleting one record for USER: ${req.query.user} and ID: ${req.query.eventScheduleId}`);
       EventSchedule.findOneAndRemove({eventScheduleId: req.query.eventScheduleId}, (err, eventschedule) => {
           if (err) return res.status(500).send(err);
 
-          console.log("EventSchedule successfully deleted for ID: ", eventschedule);
+          console.log("Successfully deleted EventSchedule is: ", eventschedule);
           res.status(200).send(eventschedule);
       });
   });
