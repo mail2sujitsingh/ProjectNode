@@ -7,10 +7,8 @@ router.get('/', async (req, res) => {
     res.send(users);
   });
 
-  // router.get('/:id/:name', (request, response) => {
-  //   response.send(`You are requesting for id: ${request.params.id} and name: ${request.params.name}.`);
-  // });
 
+  // creating new user.
   router.post('',async (req,res)=>{
       const {error} = Validate(req.body);
       if(error) return res.status(400).send(error.details[0].message);
@@ -22,8 +20,23 @@ router.get('/', async (req, res) => {
       });
       user = await user.save();
 
-      res.send(user);
+      res.status(200).send(user);
   });
 
+  router.put('/:id', async (req, res) => {
+    const { error } = Validate(req.body); 
+    if (error) return res.status(400).send(error.details[0].message);
+  
+    const user = await User.findByIdAndUpdate(req.params.id,
+      { 
+        firstName:req.body.firstName,
+        lastName:req.body.lastName,
+        skills:req.body.skills
+      }, { new: true });
+  
+    if (!user) return res.status(404).send('The User with the given ID was not found.');
+    
+    res.send(user);
+  });
 
   module.exports = router;
