@@ -20,7 +20,7 @@ var corsOptions = {
 app.use(cors(corsOptions))
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-app.use('/api/userlist', users);
+app.use('/api/user', users);
 app.use('/api/attendees', attendees);
 app.use('/api/eventschedule', eventschedule);
 

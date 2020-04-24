@@ -3,7 +3,7 @@ const router = express.Router();
 const {Validate,User} = require('../models/users');
 
 router.get('/', async (req, res) => {
-    const users = await Users.find();
+    const users = await User.find();
     res.send(users);
   });
 
@@ -13,13 +13,11 @@ router.get('/', async (req, res) => {
       const {error} = Validate(req.body);
       if(error) return res.status(400).send(error.details[0].message);
 
-      const user = new User({
+      let user = new User({
         firstName:req.body.firstName,
         lastName:req.body.lastName,
-        skills:req.body.skills
       });
       user = await user.save();
-
       res.status(200).send(user);
   });
 
