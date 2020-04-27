@@ -22,8 +22,9 @@ router.get('/', async (req, res) => {
   });
 
   router.put('/:id', async (req, res) => {
-    const { error } = Validate(req.body); 
-    if (error) return res.status(400).send(error.details[0].message);
+    // console.log(req.body);
+    // const { error } = Validate(req.body); 
+    // if (error) return res.status(400).send(error.details[0].message);
   
     const user = await User.findByIdAndUpdate(req.params.id,
       { 
